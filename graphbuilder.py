@@ -111,11 +111,3 @@ def visualize_graph(graph):
     pos = graphviz_layout(graph, prog='dot')
     nx.draw(graph, pos, with_labels=True, arrows=True)
     return fig
-
-
-if __name__ == '__main__':
-    base_nodes = [FunctionNode(actions.some_other_action),]
-    # interesting disjoint graph example:
-    # base_nodes = [FunctionNode(actions.some_other_action), FunctionNode(actions.bar)]
-    # look into nx.strongly_connected_components
-    graph = actions_to_graph(base_nodes)
