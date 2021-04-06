@@ -77,6 +77,16 @@ def fill_graph(graph, rootns):
     return full_graph
 
 
+def solution(filled_graph, base_nodes):
+    node_data = nx.get_node_attributes(filled_graph, 'value')
+
+    name_solution_map = {}
+    for base_node in base_nodes:
+        name_solution_map[base_node.name] = node_data[base_node]
+
+    return name_solution_map
+
+
 def unused_keys(rootns, graph):
     leaves = set(graph_leaves(graph))
     leaf_names = {leaf.name for leaf in leaves}
@@ -95,3 +105,5 @@ if __name__ == '__main__':
 
     rootns = {'num': 5, 'foo': 2, 'baz': 5, 'y': 10} # Would read this from the runcard
     filled_graph = fill_graph(graph, rootns)
+
+    sol = solution(filled_graph, base_nodes)
