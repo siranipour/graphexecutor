@@ -1,9 +1,8 @@
 import actions
-from graphbuilder import actions_to_graph, FunctionNode, LeafNode, visualize_graph
+from graphbuilder import actions_to_graph, FunctionNode, LeafNode
 
 from dask.delayed import delayed
 import networkx as nx
-import matplotlib.pyplot as plt
 
 
 def required_keys(graph):
