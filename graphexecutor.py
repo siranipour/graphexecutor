@@ -86,12 +86,15 @@ def fill_graph(graph, rootns):
     return full_graph
 
 
-def solution(filled_graph, base_nodes):
+def solution(filled_graph, base_nodes, parallel=False):
     node_data = nx.get_node_attributes(filled_graph, 'value')
 
     name_solution_map = {}
     for base_node in base_nodes:
-        name_solution_map[base_node.name] = node_data[base_node]
+        if parallel:
+            name_solution_map[base_node.name] = node_data[base_node].compute()
+        else:
+            name_solution_map[base_node.name] = node_data[base_node]
 
     return name_solution_map
 
