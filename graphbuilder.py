@@ -70,12 +70,6 @@ def num_nodes_to_wire(graph):
     return len(nodes_to_wire(graph))
 
 
-def wire_nodes(graph):
-    num = num_nodes_to_wire(graph)
-    if num == 0:
-        return graph
-
-
 def create_base_graph(base_nodes):
     graph = nx.DiGraph()
     for node in base_nodes:
