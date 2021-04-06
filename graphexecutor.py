@@ -11,6 +11,15 @@ def required_keys(graph):
     return [node.name for node in leaves]
 
 
+def unused_keys(rootns, graph):
+    leaves = set(graph_leaves(graph))
+    leaf_names = {leaf.name for leaf in leaves}
+
+    rootns_keys = set(rootns.keys())
+
+    return set.difference(rootns_keys, leaf_names)
+
+
 def graph_leaves(graph):
     # The inputs
     f = lambda node: isinstance(node, LeafNode)
@@ -21,6 +30,14 @@ def graph_roots(graph):
     # The nodes that connect all the dependencies
     f = lambda node: graph.in_degree(node) == 0
     return list(filter(f, graph))
+
+
+def to_delayed_graph(graph):
+    for node in graph.nodes:
+        if hasattr(node, 'func'):
+            f = node.func
+            node.func = delayed(f)
+    return graph
 
 
 def fill_leaves(graph, rootns):
@@ -72,14 +89,6 @@ def fill_graph_with_leaves(graph_with_leaves):
     return fill_graph_with_leaves(graph_with_leaves)
 
 
-def to_delayed_graph(graph):
-    for node in graph.nodes:
-        if hasattr(node, 'func'):
-            f = node.func
-            node.func = delayed(f)
-    return graph
-
-
 def fill_graph(graph, rootns):
     graph_with_leaves = fill_leaves(graph, rootns)
     full_graph = fill_graph_with_leaves(graph_with_leaves)
@@ -99,15 +108,6 @@ def solution(filled_graph, base_nodes, parallel=False):
     return name_solution_map
 
 
-def unused_keys(rootns, graph):
-    leaves = set(graph_leaves(graph))
-    leaf_names = {leaf.name for leaf in leaves}
-
-    rootns_keys = set(rootns.keys())
-
-    return set.difference(rootns_keys, leaf_names)
-
-
 if __name__ == '__main__':
     # base_nodes = [FunctionNode(actions.some_other_action),]
     # interesting disjoint graph example:
@@ -116,6 +116,10 @@ if __name__ == '__main__':
     graph = actions_to_graph(base_nodes)
 
     rootns = {'num': 5, 'foo': 2, 'baz': 5, 'y': 10} # Would read this from the runcard
+    # Uncomment the following for parallel graph
+    # delayed_graph = to_delayed_graph(graph)
+    # filled_graph = fill_graph(delayed_graph, rootns)
+    # sol = solution(filled_graph, base_nodes, parallel=True)
     filled_graph = fill_graph(graph, rootns)
 
     sol = solution(filled_graph, base_nodes)
