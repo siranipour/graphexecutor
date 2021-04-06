@@ -9,7 +9,11 @@ import actions
 FUNCTION_MAPPING = dict(inspect.getmembers(actions, inspect.isfunction))
 
 
-class Node: pass
+class Node:
+    def __hash__(self):
+        return hash(self.name)
+    def __eq__(self, other):
+        return self.name == other.name
 
 
 class FunctionNode(Node):
