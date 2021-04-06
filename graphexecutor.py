@@ -44,6 +44,39 @@ def nodes_to_evaluate_next(graph):
     return nodes
 
 
+def evaluate_node(graph, node):
+    children = list(graph.successors(node))
+    node_value_mapping = nx.get_node_attributes(graph, 'value')
+
+    calling_dict = {}
+    for child in children:
+        calling_dict[child.name] = node_value_mapping[child]
+
+    res = node.func(**calling_dict)
+
+    node_res_map = {node: {'value': res, 'filled': True}}
+    nx.set_node_attributes(graph, node_res_map)
+
+    return graph
+
+
+def fill_graph_with_leaves(graph_with_leaves):
+    next_nodes = nodes_to_evaluate_next(graph_with_leaves)
+    if not next_nodes:
+        return graph_with_leaves
+
+    for node in next_nodes:
+        graph_with_leaves = evaluate_node(graph_with_leaves, node)
+
+    return fill_graph_with_leaves(graph_with_leaves)
+
+
+def fill_graph(graph, rootns):
+    graph_with_leaves = fill_leaves(graph, rootns)
+    full_graph = fill_graph_with_leaves(graph_with_leaves)
+    return full_graph
+
+
 def unused_keys(rootns, graph):
     leaves = set(graph_leaves(graph))
     leaf_names = {leaf.name for leaf in leaves}
@@ -61,4 +94,4 @@ if __name__ == '__main__':
     graph = actions_to_graph(base_nodes)
 
     rootns = {'num': 5, 'foo': 2, 'baz': 5, 'y': 10} # Would read this from the runcard
-    filled_graph = fill_leaves(graph, rootns)
+    filled_graph = fill_graph(graph, rootns)
