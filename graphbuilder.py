@@ -97,7 +97,10 @@ def complete_graph(graph):
 
 def actions_to_graph(base_nodes):
     base_graph = create_base_graph(base_nodes)
-    completed_graph = complete_graph(base_graph)
+    try:
+        completed_graph = complete_graph(base_graph)
+    except RecursionError as e:
+        raise RuntimeError("Recursion limit exceeded. Possible cyclic dependency") from e
     return completed_graph
 
 
