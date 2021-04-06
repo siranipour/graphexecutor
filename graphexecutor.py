@@ -1,6 +1,7 @@
 import actions
 from graphbuilder import actions_to_graph, FunctionNode, LeafNode, visualize_graph
 
+from dask.delayed import delayed
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -69,6 +70,14 @@ def fill_graph_with_leaves(graph_with_leaves):
         graph_with_leaves = evaluate_node(graph_with_leaves, node)
 
     return fill_graph_with_leaves(graph_with_leaves)
+
+
+def to_delayed_graph(graph):
+    for node in graph.nodes:
+        if hasattr(node, 'func'):
+            f = node.func
+            node.func = delayed(f)
+    return graph
 
 
 def fill_graph(graph, rootns):
