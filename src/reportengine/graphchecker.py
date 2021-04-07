@@ -1,20 +1,22 @@
 import functools
 
-from graphbuilder import find_solution_node, graph_leaves
-from graphexecutor import unused_keys
+import networkx as nx
+
+import graphbuilder as gb
+import graphexecutor as ge
 
 
 class CycleError(Exception): pass
 
 
 def check_bare_graph_against_runcard(graph, rootns):
-    needed_nodes = graph_leaves(graph)
+    needed_nodes = gb.graph_leaves(graph)
     needed_keys = set([node.name for node in needed_nodes])
 
     missing_keys = needed_keys.difference(rootns.keys())
     missing_nodes = [node for node in needed_nodes if node.name in missing_keys]
 
-    solution_node = find_solution_node(graph)
+    solution_node = gb.find_solution_node(graph)
 
     node_path_map = {}
     for node in missing_nodes:
@@ -23,7 +25,7 @@ def check_bare_graph_against_runcard(graph, rootns):
         path = [node.name for node in path]
         node_path_map[node.name] = path
 
-    extra_keys = unused_keys(graph, rootns)
+    extra_keys = ge.unused_keys(graph, rootns)
 
     if missing_keys:
         raise KeyError(

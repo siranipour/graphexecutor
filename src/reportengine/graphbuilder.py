@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 import actions
-from graphchecker import check_for_cycles
+import graphchecker as gc
 
 # Like providers
 FUNCTION_MAPPING = dict(inspect.getmembers(actions, inspect.isfunction))
@@ -102,7 +102,7 @@ def complete_graph(graph):
     return complete_graph(graph)
 
 
-@check_for_cycles
+@gc.check_for_cycles
 def actions_to_graph(base_nodes):
     base_graph = create_base_graph(base_nodes)
     completed_graph = complete_graph(base_graph)

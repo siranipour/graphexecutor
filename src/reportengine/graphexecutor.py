@@ -1,11 +1,11 @@
-from graphbuilder import FunctionNode, LeafNode, graph_leaves
+import graphbuilder as gb
 
 from dask.delayed import delayed
 import networkx as nx
 
 
 def unused_keys(graph, rootns):
-    leaves = set(graph_leaves(graph))
+    leaves = set(gb.graph_leaves(graph))
     leaf_names = {leaf.name for leaf in leaves}
 
     rootns_keys = set(rootns.keys())
@@ -22,7 +22,7 @@ def to_delayed_graph(graph):
 
 
 def fill_leaves(graph, rootns):
-    nodes_to_fill = graph_leaves(graph)
+    nodes_to_fill = gb.graph_leaves(graph)
     for node in nodes_to_fill:
         new_attrs = {node: {'value': rootns[node.name], 'filled': True}}
         nx.set_node_attributes(graph, new_attrs)
