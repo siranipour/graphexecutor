@@ -9,6 +9,18 @@ import graphexecutor as ge
 class CycleError(Exception): pass
 
 
+class MissingParameterError(Exception): pass
+
+
+def format_node_path(node_path_map):
+    msg = "The following keys are missing:\n"
+    for node, path in node_path_map.items():
+        msg += f'- {node} through: '
+        msg += ' -> '.join(path)
+        msg += '\n\n'
+    msg = msg[:-1]
+    return msg
+
 def check_bare_graph_against_runcard(graph, rootns):
     needed_nodes = gb.graph_leaves(graph)
     needed_keys = set([node.name for node in needed_nodes])
@@ -28,10 +40,8 @@ def check_bare_graph_against_runcard(graph, rootns):
     extra_keys = ge.unused_keys(graph, rootns)
 
     if missing_keys:
-        raise KeyError(
-                f"The following keys are missing: {list(node_path_map.keys())} "
-                f"through {list(node_path_map.values())}"
-            )
+        msg = format_node_path(node_path_map)
+        raise MissingParameterError(msg)
 
     if extra_keys:
         print(f"WARNING: The following are unused keys: {extra_keys}")
