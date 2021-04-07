@@ -50,7 +50,6 @@ def nodes_to_evaluate_next(graph):
     nodes = set()
     filled_nodes = nx.get_node_attributes(graph, 'filled')
     for node in graph.nodes:
-        # TODO: maybe remove the list cast
         successors = set(graph.successors(node))
         successors_filled = successors.issubset(filled_nodes)
 
