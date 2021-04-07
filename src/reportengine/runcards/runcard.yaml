@@ -1,0 +1,12 @@
+foo: 5
+
+num: 10
+
+baz: 19
+
+extra_key: 100
+
+actions:
+ - more_complicated_action
+ - some_other_action
+ - bar
