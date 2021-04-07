@@ -1,11 +1,13 @@
 import yaml
 
-from graphbuilder import actions_to_graph, FUNCTION_MAPPING, FunctionNode
+import networkx as nx
+
+from graphbuilder import actions_to_graph, FUNCTION_MAPPING, FunctionNode, graph_leaves
 from graphexecutor import (
     fill_graph,
+    find_solution_node,
     to_delayed_graph,
     graph_solution,
-    required_keys,
     unused_keys,
 )
 
@@ -33,13 +35,28 @@ def runcard_rootns(runcard):
 
 
 def check_bare_graph_against_runcard(graph, rootns):
-    needed_keys = required_keys(graph)
-    extra_keys = unused_keys(graph, rootns)
+    needed_nodes = graph_leaves(graph)
+    needed_keys = set([node.name for node in needed_nodes])
 
     missing_keys = needed_keys.difference(rootns.keys())
+    missing_nodes = [node for node in needed_nodes if node.name in missing_keys]
+
+    solution_node = find_solution_node(graph)
+
+    node_path_map = {}
+    for node in missing_nodes:
+        # Don't expose solution node to user
+        path = nx.shortest_path(graph, solution_node, node)[1:]
+        path = [node.name for node in path]
+        node_path_map[node.name] = path
+
+    extra_keys = unused_keys(graph, rootns)
 
     if missing_keys:
-        raise KeyError(f"The following keys are missing: {missing_keys}")
+        raise KeyError(
+                f"The following keys are missing: {list(node_path_map.keys())} "
+                f"through {list(node_path_map.values())}"
+            )
 
     if extra_keys:
         print(f"WARNING: The following are unused keys: {extra_keys}")

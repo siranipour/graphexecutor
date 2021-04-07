@@ -129,6 +129,12 @@ def actions_to_graph(base_nodes):
     return graph_with_solution_node
 
 
+def graph_leaves(graph):
+    # The inputs
+    f = lambda node: isinstance(node, LeafNode)
+    return list(filter(f, graph.nodes))
+
+
 def visualize_graph(graph):
     from networkx.drawing.nx_agraph import graphviz_layout
     fig, ax = plt.subplots()

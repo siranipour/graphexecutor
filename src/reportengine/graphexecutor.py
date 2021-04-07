@@ -1,12 +1,9 @@
-from graphbuilder import FunctionNode, LeafNode
+from graphbuilder import FunctionNode, LeafNode, graph_leaves
 
 from dask.delayed import delayed
 import networkx as nx
 
 
-def required_keys(graph):
-    leaves = graph_leaves(graph)
-    return set([node.name for node in leaves])
 
 
 def unused_keys(graph, rootns):
@@ -16,18 +13,6 @@ def unused_keys(graph, rootns):
     rootns_keys = set(rootns.keys())
 
     return set.difference(rootns_keys, leaf_names)
-
-
-def graph_leaves(graph):
-    # The inputs
-    f = lambda node: isinstance(node, LeafNode)
-    return list(filter(f, graph.nodes))
-
-
-def graph_roots(graph):
-    # The nodes that connect all the dependencies
-    f = lambda node: graph.in_degree(node) == 0
-    return list(filter(f, graph))
 
 
 def to_delayed_graph(graph):
@@ -102,4 +87,11 @@ def graph_solution(filled_graph, parallel):
                 return sol.compute()
             return sol
     raise RuntimeError("Solution node not found, ensure one is added.")
+
+
+def find_solution_node(graph):
+    for node in graph.nodes:
+        if getattr(node, 'final_action', False):
+            return node
+    return None
 
