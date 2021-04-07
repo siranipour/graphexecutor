@@ -9,7 +9,7 @@ def required_keys(graph):
     return [node.name for node in leaves]
 
 
-def unused_keys(rootns, graph):
+def unused_keys(graph, rootns):
     leaves = set(graph_leaves(graph))
     leaf_names = {leaf.name for leaf in leaves}
 
