@@ -92,7 +92,7 @@ def fill_graph(graph, rootns):
     return full_graph
 
 
-def solution(filled_graph, parallel=False):
+def solution(filled_graph, parallel):
     node_data = nx.get_node_attributes(filled_graph, 'value')
     # Possibly the solution node is always the last one
     for node in filled_graph.nodes:
