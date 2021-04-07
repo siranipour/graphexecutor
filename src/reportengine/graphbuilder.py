@@ -93,12 +93,14 @@ def check_for_cycles(f):
     return checker
 
 
+def _solution_getter(**kwargs):
+    return kwargs
+
+
 # Connects any disjoint graphs and holds all the requested solutions in one node
 def add_solution_node(graph, base_nodes):
-    def solution_getter(**kwargs):
-        return kwargs
 
-    solution_node = FunctionNode(solution_getter)
+    solution_node = FunctionNode(_solution_getter)
     solution_node.final_action = True
 
     for base_node in base_nodes:
