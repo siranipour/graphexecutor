@@ -111,6 +111,7 @@ if __name__ == '__main__':
     # base_nodes = [FunctionNode(actions.some_other_action),]
     # interesting disjoint graph example:
     base_nodes = [FunctionNode(actions.some_other_action), FunctionNode(actions.bar)]
+    # base_nodes = [FunctionNode(actions.cycle)]
     # look into nx.strongly_connected_components
     graph = actions_to_graph(base_nodes)
 

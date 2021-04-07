@@ -1,3 +1,4 @@
+import functools
 import inspect
 
 import matplotlib.pyplot as plt
@@ -7,6 +8,9 @@ import actions
 
 # Like providers
 FUNCTION_MAPPING = dict(inspect.getmembers(actions, inspect.isfunction))
+
+
+class CycleError(Exception): pass
 
 
 class Node:
@@ -66,10 +70,6 @@ def nodes_to_wire(graph):
     return list(filter(f, graph.nodes))
 
 
-def num_nodes_to_wire(graph):
-    return len(nodes_to_wire(graph))
-
-
 def create_base_graph(base_nodes):
     graph = nx.DiGraph()
     for node in base_nodes:
@@ -77,13 +77,30 @@ def create_base_graph(base_nodes):
     return graph
 
 
+def check_for_cycles(f):
+    @functools.wraps(f)
+    def checker(*args, **kwargs):
+        graph = f(*args, **kwargs)
+        cycles = list(nx.simple_cycles(graph))
+        for idx, cycle in enumerate(cycles):
+            cycles[idx] = [node.name for node in cycle]
+        if cycles:
+            raise CycleError(
+                "The following cyclic dependencies exist "
+                f"in the dependency graph {cycles}"
+                )
+        return graph
+    return checker
+
+
+@check_for_cycles
 def complete_graph(graph):
     """Find all nodes that need wiring and wire them
     """
-    num_to_wire = num_nodes_to_wire(graph)
-    if num_to_wire == 0:
-        return graph
     to_wire = nodes_to_wire(graph)
+    if not to_wire:
+        return graph
+
     for node in to_wire:
         graph = connect_node_to_dependencies(graph, node)
     return complete_graph(graph)
