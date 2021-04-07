@@ -1,16 +1,13 @@
-import functools
 import inspect
 
 import matplotlib.pyplot as plt
 import networkx as nx
 
 import actions
+from graphchecker import check_for_cycles
 
 # Like providers
 FUNCTION_MAPPING = dict(inspect.getmembers(actions, inspect.isfunction))
-
-
-class CycleError(Exception): pass
 
 
 class Node:
@@ -75,22 +72,6 @@ def create_base_graph(base_nodes):
     for node in base_nodes:
         graph.add_node(node)
     return graph
-
-
-def check_for_cycles(f):
-    @functools.wraps(f)
-    def checker(*args, **kwargs):
-        graph = f(*args, **kwargs)
-        cycles = list(nx.simple_cycles(graph))
-        for idx, cycle in enumerate(cycles):
-            cycles[idx] = [node.name for node in cycle]
-        if cycles:
-            raise CycleError(
-                "The following cyclic dependencies exist "
-                f"in the dependency graph {cycles}"
-                )
-        return graph
-    return checker
 
 
 def _solution_getter(**kwargs):

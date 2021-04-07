@@ -4,8 +4,6 @@ from dask.delayed import delayed
 import networkx as nx
 
 
-
-
 def unused_keys(graph, rootns):
     leaves = set(graph_leaves(graph))
     leaf_names = {leaf.name for leaf in leaves}
