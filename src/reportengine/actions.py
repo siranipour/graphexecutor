@@ -19,3 +19,15 @@ def some_other_action(more_complicated_action, foo):
 
 def bar(baz):
     return baz
+
+def v1(v2, v3):
+    return 1
+
+def v2(v1, v3):
+    return 1
+
+def v3(v1, v2):
+    return 1
+
+def cycle(v1, v2, v3):
+    return 1
