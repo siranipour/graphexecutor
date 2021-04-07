@@ -10,10 +10,8 @@ if __name__ == '__main__':
     graph = actions_to_graph(base_nodes)
 
     rootns = {'num': 5, 'foo': 2, 'baz': 5, 'y': 10} # Would read this from the runcard
-    # Uncomment the following for parallel graph
-    # delayed_graph = to_delayed_graph(graph)
-    # filled_graph = fill_graph(delayed_graph, rootns)
-    # sol = solution(filled_graph, base_nodes, parallel=True)
-    filled_graph = fill_graph(graph, rootns)
+    final_graph = add_solution_node(graph, base_nodes)
+    delayed_graph = to_delayed_graph(final_graph)
+    filled_graph = fill_graph(delayed_graph, rootns)
 
-    sol = solution(filled_graph, base_nodes)
+    sol = solution(filled_graph, True)

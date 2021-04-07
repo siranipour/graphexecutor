@@ -88,21 +88,34 @@ def fill_graph_with_leaves(graph_with_leaves):
     return fill_graph_with_leaves(graph_with_leaves)
 
 
+# Connects any disjoint graphs and holds all the requested solutions in one node
+def add_solution_node(graph, base_nodes):
+    def solution_getter(**kwargs):
+        return kwargs
+
+    solution_node = FunctionNode(solution_getter)
+    solution_node.final_action = True
+
+    for base_node in base_nodes:
+        graph.add_edge(solution_node, base_node)
+
+    return graph
+
+
 def fill_graph(graph, rootns):
     graph_with_leaves = fill_leaves(graph, rootns)
     full_graph = fill_graph_with_leaves(graph_with_leaves)
     return full_graph
 
 
-def solution(filled_graph, base_nodes, parallel=False):
+def solution(filled_graph, parallel=False):
     node_data = nx.get_node_attributes(filled_graph, 'value')
+    # Possibly the solution node is always the last one
+    for node in filled_graph.nodes:
+        if getattr(node, 'final_action', False):
+            sol = node_data[node]
+            if parallel:
+                return sol.compute()
+            return sol
+    raise RuntimeError("Solution node not found, ensure one is added.")
 
-    name_solution_map = {}
-    for base_node in base_nodes:
-        if parallel:
-            # XXX: this possibly computes from scratch each node we request...
-            name_solution_map[base_node.name] = node_data[base_node].compute()
-        else:
-            name_solution_map[base_node.name] = node_data[base_node]
-
-    return name_solution_map
