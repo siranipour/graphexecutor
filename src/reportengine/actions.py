@@ -14,7 +14,7 @@ def action(add_one, multiply_three):
 def more_complicated_action(action, add_one):
     return action + add_one ** 2
 
-def some_other_action(more_complicated_action, foo):
+def some_other_action(more_complicated_action, foo, cycle):
     return foo
 
 def bar(baz):

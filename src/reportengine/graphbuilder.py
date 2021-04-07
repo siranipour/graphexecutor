@@ -107,7 +107,6 @@ def add_solution_node(graph, base_nodes):
     return graph
 
 
-@check_for_cycles
 def complete_graph(graph):
     """Find all nodes that need wiring and wire them
     """
@@ -120,6 +119,7 @@ def complete_graph(graph):
     return complete_graph(graph)
 
 
+@check_for_cycles
 def actions_to_graph(base_nodes):
     base_graph = create_base_graph(base_nodes)
     completed_graph = complete_graph(base_graph)
