@@ -88,10 +88,3 @@ def graph_solution(filled_graph, parallel):
             return sol
     raise RuntimeError("Solution node not found, ensure one is added.")
 
-
-def find_solution_node(graph):
-    for node in graph.nodes:
-        if getattr(node, 'final_action', False):
-            return node
-    return None
-

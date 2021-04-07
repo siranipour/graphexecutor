@@ -135,6 +135,13 @@ def graph_leaves(graph):
     return list(filter(f, graph.nodes))
 
 
+def find_solution_node(graph):
+    for node in graph.nodes:
+        if getattr(node, 'final_action', False):
+            return node
+    return None
+
+
 def visualize_graph(graph):
     from networkx.drawing.nx_agraph import graphviz_layout
     fig, ax = plt.subplots()
