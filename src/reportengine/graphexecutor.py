@@ -6,7 +6,7 @@ import networkx as nx
 
 def required_keys(graph):
     leaves = graph_leaves(graph)
-    return [node.name for node in leaves]
+    return set([node.name for node in leaves])
 
 
 def unused_keys(graph, rootns):
