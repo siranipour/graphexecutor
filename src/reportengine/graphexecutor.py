@@ -87,20 +87,6 @@ def fill_graph_with_leaves(graph_with_leaves):
     return fill_graph_with_leaves(graph_with_leaves)
 
 
-# Connects any disjoint graphs and holds all the requested solutions in one node
-def add_solution_node(graph, base_nodes):
-    def solution_getter(**kwargs):
-        return kwargs
-
-    solution_node = FunctionNode(solution_getter)
-    solution_node.final_action = True
-
-    for base_node in base_nodes:
-        graph.add_edge(solution_node, base_node)
-
-    return graph
-
-
 def fill_graph(graph, rootns):
     graph_with_leaves = fill_leaves(graph, rootns)
     full_graph = fill_graph_with_leaves(graph_with_leaves)

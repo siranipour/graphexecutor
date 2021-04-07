@@ -93,6 +93,20 @@ def check_for_cycles(f):
     return checker
 
 
+# Connects any disjoint graphs and holds all the requested solutions in one node
+def add_solution_node(graph, base_nodes):
+    def solution_getter(**kwargs):
+        return kwargs
+
+    solution_node = FunctionNode(solution_getter)
+    solution_node.final_action = True
+
+    for base_node in base_nodes:
+        graph.add_edge(solution_node, base_node)
+
+    return graph
+
+
 @check_for_cycles
 def complete_graph(graph):
     """Find all nodes that need wiring and wire them
@@ -108,11 +122,9 @@ def complete_graph(graph):
 
 def actions_to_graph(base_nodes):
     base_graph = create_base_graph(base_nodes)
-    try:
-        completed_graph = complete_graph(base_graph)
-    except RecursionError as e:
-        raise RuntimeError("Recursion limit exceeded. Possible cyclic dependency") from e
-    return completed_graph
+    completed_graph = complete_graph(base_graph)
+    graph_with_solution_node = add_solution_node(completed_graph, base_nodes)
+    return graph_with_solution_node
 
 
 def visualize_graph(graph):
