@@ -64,6 +64,11 @@ def filled_graph_from_runcard(runcard, parallel):
     return graph_with_values
 
 
+def graph_from_path(path, parallel=False):
+    runcard = read_input(path)
+    return filled_graph_from_runcard(runcard, parallel)
+
+
 def execute_runcard(path, parallel=False):
     runcard = read_input(path)
     graph = filled_graph_from_runcard(runcard, parallel)
