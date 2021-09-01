@@ -38,6 +38,8 @@ install(show_locals=True)
 def main(providers, runcard, parallel):
     ld = load_provider_functions(providers)
 
+    if parallel:
+        logging.warning("Executing in parallel")
     sol = execute_runcard(runcard, ld, parallel)
     rich.print(sol)
     return sol
