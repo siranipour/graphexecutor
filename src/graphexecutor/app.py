@@ -6,10 +6,23 @@ import click
 
 from graphexecutor.runcard_parser import execute_runcard
 
+
 @click.command()
-@click.argument('providers', nargs=-1, type=click.Path(exists=True, path_type=pathlib.Path), required=True)
-@click.argument('runcard', nargs=1, type=click.Path(exists=True, path_type=pathlib.Path), required=True)
-@click.option('--parallel', is_flag=True, default=False, help='Execute the graph asynchronously')
+@click.argument(
+    "providers",
+    nargs=-1,
+    type=click.Path(exists=True, path_type=pathlib.Path),
+    required=True,
+)
+@click.argument(
+    "runcard",
+    nargs=1,
+    type=click.Path(exists=True, path_type=pathlib.Path),
+    required=True,
+)
+@click.option(
+    "--parallel", is_flag=True, default=False, help="Execute the graph asynchronously"
+)
 def main(providers, runcard, parallel):
     ld = load_provider_functions(providers)
 
@@ -31,5 +44,3 @@ def load_provider_functions(providers):
         functions = {**functions, **provider_mapping}
 
     return functions
-
-
