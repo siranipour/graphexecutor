@@ -1,4 +1,9 @@
+# Execute this example runcard using
+# ge actions.py actions2.py runcard.yaml
+
 foo: 5
+
+new_file_key: 5
 
 num: 10
 
@@ -10,3 +15,4 @@ actions:
  - more_complicated_action
  - some_other_action
  - bar
+ - new_file_action
