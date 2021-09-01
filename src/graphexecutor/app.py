@@ -3,6 +3,7 @@ import importlib.util
 import pathlib
 
 import click
+import rich
 from rich.traceback import install
 
 from graphexecutor.runcard_parser import execute_runcard
@@ -29,7 +30,7 @@ def main(providers, runcard, parallel):
     ld = load_provider_functions(providers)
 
     sol = execute_runcard(runcard, ld, parallel)
-    print(sol)
+    rich.print(sol)
     return sol
 
 
