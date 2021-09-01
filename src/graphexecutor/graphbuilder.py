@@ -3,12 +3,7 @@ import inspect
 import matplotlib.pyplot as plt
 import networkx as nx
 
-import actions
-import graphchecker as gc
-
-# Like providers
-FUNCTION_MAPPING = dict(inspect.getmembers(actions, inspect.isfunction))
-
+from graphexecutor import graphchecker as gc
 
 class Node:
     def __hash__(self):
@@ -32,7 +27,7 @@ class LeafNode(Node):
         return f"StaticNode({self.name})"
 
 
-def find_node_dependencies(node):
+def find_node_dependencies(node, spec_func_map):
     if isinstance(node, LeafNode):
         return None
 
@@ -41,8 +36,8 @@ def find_node_dependencies(node):
     deps = sig.parameters.keys()
     spec_dependencies = []
     for dep in deps:
-        if dep in FUNCTION_MAPPING:
-            func = FUNCTION_MAPPING[dep]
+        if dep in spec_func_map:
+            func = spec_func_map[dep]
             node_dependency = FunctionNode(func)
         else:
             node_dependency = LeafNode(dep)
@@ -51,12 +46,12 @@ def find_node_dependencies(node):
     return spec_dependencies
 
 
-def connect_node_to_dependencies(graph, node): # The graph here is like a global object
+def connect_node_to_dependencies(graph, node, spec_func_map): # The graph here is like a global object
                                                # think of passing it by reference in C++
     """Connect a given node with all
     its dependencies
     """
-    deps = find_node_dependencies(node)
+    deps = find_node_dependencies(node, spec_func_map)
     for dep in deps:
         graph.add_edge(node, dep)
     return graph
@@ -90,7 +85,7 @@ def add_solution_node(graph, base_nodes):
     return graph
 
 
-def complete_graph(graph):
+def complete_graph(graph, spec_func_map):
     """Find all nodes that need wiring and wire them
     """
     to_wire = nodes_to_wire(graph)
@@ -98,14 +93,14 @@ def complete_graph(graph):
         return graph
 
     for node in to_wire:
-        graph = connect_node_to_dependencies(graph, node)
-    return complete_graph(graph)
+        graph = connect_node_to_dependencies(graph, node, spec_func_map)
+    return complete_graph(graph, spec_func_map)
 
 
 @gc.check_for_cycles
-def actions_to_graph(base_nodes):
+def actions_to_graph(base_nodes, spec_func_map):
     base_graph = create_base_graph(base_nodes)
-    completed_graph = complete_graph(base_graph)
+    completed_graph = complete_graph(base_graph, spec_func_map)
     graph_with_solution_node = add_solution_node(completed_graph, base_nodes)
     return graph_with_solution_node
 

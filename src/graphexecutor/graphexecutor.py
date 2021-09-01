@@ -1,4 +1,4 @@
-import graphbuilder as gb
+from graphexecutor import graphbuilder as gb
 
 from dask.delayed import delayed
 import networkx as nx

@@ -2,8 +2,8 @@ import functools
 
 import networkx as nx
 
-import graphbuilder as gb
-import graphexecutor as ge
+from graphexecutor import graphbuilder as gb
+from graphexecutor import graphexecutor as ge
 
 
 class CycleError(Exception): pass
