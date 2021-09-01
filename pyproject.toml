@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "graphexecutor"
-version = "0.1.1"
+version = "0.1.2"
 description = "Graphed based execution of Python paradigms"
 authors = ["siranipour <si292@cam.ac.uk>"]
 
