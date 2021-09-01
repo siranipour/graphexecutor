@@ -1,7 +1,5 @@
 import yaml
 
-import networkx as nx
-
 from graphbuilder import actions_to_graph, FUNCTION_MAPPING, FunctionNode
 from graphchecker import check_bare_graph_against_runcard
 from graphexecutor import (
