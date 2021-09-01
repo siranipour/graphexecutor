@@ -3,9 +3,11 @@ import importlib.util
 import pathlib
 
 import click
+from rich.traceback import install
 
 from graphexecutor.runcard_parser import execute_runcard
 
+install(show_locals=True)
 
 @click.command()
 @click.argument(
