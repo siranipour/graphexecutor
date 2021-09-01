@@ -1,12 +1,21 @@
 import inspect
 import importlib.util
+import logging
 import pathlib
 
 import click
 import rich
+from rich.logging import RichHandler
 from rich.traceback import install
 
 from graphexecutor.runcard_parser import execute_runcard
+
+FORMAT = "%(message)s"
+logging.basicConfig(
+    level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
+)
+
+log = logging.getLogger("rich")
 
 install(show_locals=True)
 

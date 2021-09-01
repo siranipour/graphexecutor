@@ -1,10 +1,9 @@
-import functools
-
+import logging
 import networkx as nx
+
 
 from graphexecutor import graphbuilder as gb
 from graphexecutor import graphrunner as gr
-
 
 class CycleError(Exception): pass
 
@@ -44,7 +43,7 @@ def check_bare_graph_against_runcard(graph, rootns):
         raise MissingParameterError(msg)
 
     if extra_keys:
-        print(f"WARNING: The following are unused keys: {extra_keys}")
+        logging.warning(f"The following are unused keys: {extra_keys}")
 
 
 def check_for_cycles(graph):
