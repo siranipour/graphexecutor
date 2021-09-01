@@ -3,7 +3,7 @@ import functools
 import networkx as nx
 
 from graphexecutor import graphbuilder as gb
-from graphexecutor import graphexecutor as ge
+from graphexecutor import graphrunner as gr
 
 
 class CycleError(Exception): pass
@@ -37,7 +37,7 @@ def check_bare_graph_against_runcard(graph, rootns):
         path = [node.name for node in path]
         node_path_map[node.name] = path
 
-    extra_keys = ge.unused_keys(graph, rootns)
+    extra_keys = gr.unused_keys(graph, rootns)
 
     if missing_keys:
         msg = format_node_path(node_path_map)

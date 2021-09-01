@@ -2,7 +2,7 @@ import yaml
 
 from graphexecutor.graphbuilder import actions_to_graph, FunctionNode
 from graphexecutor.graphchecker import check_bare_graph_against_runcard
-from graphexecutor.graphexecutor import (
+from graphexecutor.graphrunner import (
     fill_graph,
     to_delayed_graph,
     graph_solution,
