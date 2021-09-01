@@ -97,11 +97,11 @@ def complete_graph(graph, spec_func_map):
     return complete_graph(graph, spec_func_map)
 
 
-@gc.check_for_cycles
 def actions_to_graph(base_nodes, spec_func_map):
     base_graph = create_base_graph(base_nodes)
     completed_graph = complete_graph(base_graph, spec_func_map)
     graph_with_solution_node = add_solution_node(completed_graph, base_nodes)
+    gc.check_for_cycles(graph_with_solution_node)
     return graph_with_solution_node
 
 

@@ -47,18 +47,13 @@ def check_bare_graph_against_runcard(graph, rootns):
         print(f"WARNING: The following are unused keys: {extra_keys}")
 
 
-def check_for_cycles(f):
-    @functools.wraps(f)
-    def checker(*args, **kwargs):
-        graph = f(*args, **kwargs)
-        cycles = list(nx.simple_cycles(graph))
-        for idx, cycle in enumerate(cycles):
-            cycles[idx] = [node.name for node in cycle]
-        if cycles:
-            raise CycleError(
-                "The following cyclic dependencies exist "
-                f"in the dependency graph {cycles}"
-                )
-        return graph
-    return checker
-
+def check_for_cycles(graph):
+    cycles = list(nx.simple_cycles(graph))
+    for idx, cycle in enumerate(cycles):
+        cycles[idx] = [node.name for node in cycle]
+    if cycles:
+        raise CycleError(
+            "The following cyclic dependencies exist "
+            f"in the dependency graph {cycles}"
+            )
+    return graph
