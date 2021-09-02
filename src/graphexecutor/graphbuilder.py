@@ -5,9 +5,11 @@ import networkx as nx
 
 from graphexecutor import graphchecker as gc
 
+
 class Node:
     def __hash__(self):
         return hash(self.name)
+
     def __eq__(self, other):
         return self.name == other.name
 
@@ -16,6 +18,7 @@ class FunctionNode(Node):
     def __init__(self, func):
         self.name = func.__name__
         self.func = func
+
     def __repr__(self):
         return f"FunctionNode({self.name})"
 
@@ -24,6 +27,7 @@ class LeafNode(Node):
     def __init__(self, name, default):
         self.name = name
         self.default = default
+
     def __repr__(self):
         return f"StaticNode({self.name})"
 
@@ -48,8 +52,10 @@ def find_node_dependencies(node, spec_func_map):
     return spec_dependencies
 
 
-def connect_node_to_dependencies(graph, node, spec_func_map): # The graph here is like a global object
-                                               # think of passing it by reference in C++
+def connect_node_to_dependencies(
+    graph, node, spec_func_map
+):  # The graph here is like a global object
+    # think of passing it by reference in C++
     """Connect a given node with all
     its dependencies
     """
@@ -59,8 +65,12 @@ def connect_node_to_dependencies(graph, node, spec_func_map): # The graph here i
     return graph
 
 
-def nodes_to_wire(graph):
-    f = lambda node: isinstance(node, FunctionNode) and graph.out_degree(node) == 0
+def nodes_to_wire(graph, spec_func_map):
+    f = (
+        lambda node: isinstance(node, FunctionNode)
+        and graph.out_degree(node) == 0
+        and find_node_dependencies(node, spec_func_map)
+    )
     return list(filter(f, graph.nodes))
 
 
@@ -88,9 +98,8 @@ def add_solution_node(graph, base_nodes):
 
 
 def complete_graph(graph, spec_func_map):
-    """Find all nodes that need wiring and wire them
-    """
-    to_wire = nodes_to_wire(graph)
+    """Find all nodes that need wiring and wire them"""
+    to_wire = nodes_to_wire(graph, spec_func_map)
     if not to_wire:
         return graph
 
@@ -115,15 +124,16 @@ def graph_leaves(graph):
 
 def find_solution_node(graph):
     for node in graph.nodes:
-        if getattr(node, 'final_action', False):
+        if getattr(node, "final_action", False):
             return node
     return None
 
 
 def visualize_graph(graph):
     from networkx.drawing.nx_agraph import graphviz_layout
+
     fig, ax = plt.subplots()
     graph = nx.reverse(graph, copy=True)
-    pos = graphviz_layout(graph, prog='dot')
+    pos = graphviz_layout(graph, prog="dot")
     nx.draw(graph, pos, with_labels=True, arrows=True)
     return fig
