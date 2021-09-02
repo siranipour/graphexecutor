@@ -1,4 +1,6 @@
+import inspect
 import logging
+
 import networkx as nx
 
 
@@ -21,7 +23,7 @@ def format_node_path(node_path_map):
     return msg
 
 def check_bare_graph_against_runcard(graph, rootns):
-    needed_nodes = gb.graph_leaves(graph)
+    needed_nodes = [i for i in gb.graph_leaves(graph) if i.default is inspect._empty]
     needed_keys = set([node.name for node in needed_nodes])
 
     missing_keys = needed_keys.difference(rootns.keys())

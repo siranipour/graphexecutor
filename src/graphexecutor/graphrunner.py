@@ -1,3 +1,5 @@
+import inspect
+
 from graphexecutor import graphbuilder as gb
 
 from dask.delayed import delayed
@@ -24,7 +26,11 @@ def to_delayed_graph(graph):
 def fill_leaves(graph, rootns):
     nodes_to_fill = gb.graph_leaves(graph)
     for node in nodes_to_fill:
-        new_attrs = {node: {'value': rootns[node.name], 'filled': True}}
+        if not node.default is inspect._empty:
+            val = node.default
+        else:
+            val = rootns[node.name]
+        new_attrs = {node: {'value': val, 'filled': True}}
         nx.set_node_attributes(graph, new_attrs)
     return graph
 

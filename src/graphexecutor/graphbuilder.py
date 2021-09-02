@@ -21,8 +21,9 @@ class FunctionNode(Node):
 
 
 class LeafNode(Node):
-    def __init__(self, name):
+    def __init__(self, name, default):
         self.name = name
+        self.default = default
     def __repr__(self):
         return f"StaticNode({self.name})"
 
@@ -40,7 +41,8 @@ def find_node_dependencies(node, spec_func_map):
             func = spec_func_map[dep]
             node_dependency = FunctionNode(func)
         else:
-            node_dependency = LeafNode(dep)
+            default = sig.parameters[dep].default
+            node_dependency = LeafNode(dep, default)
         spec_dependencies.append(node_dependency)
 
     return spec_dependencies
