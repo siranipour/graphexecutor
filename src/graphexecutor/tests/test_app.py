@@ -1,4 +1,4 @@
 import graphexecutor
 
 def test_version():
-    assert graphexecutor.__version__ == '0.1.3'
+    assert graphexecutor.__version__ == '0.1.4'

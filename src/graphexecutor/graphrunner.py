@@ -26,7 +26,7 @@ def to_delayed_graph(graph):
 def fill_leaves(graph, rootns):
     nodes_to_fill = gb.graph_leaves(graph)
     for node in nodes_to_fill:
-        if not node.default is inspect._empty:
+        if not node.default is inspect._empty and node.name not in rootns:
             val = node.default
         else:
             val = rootns[node.name]
