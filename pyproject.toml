@@ -6,14 +6,15 @@ authors = ["siranipour <si292@cam.ac.uk>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-dask = "^2021.8.1"
-networkx = "^2.6.2"
-click = "^8.0.1"
-rich = "^10.9.0"
-matplotlib = "^3.4.3"
+dask = "*"
+networkx = "*"
+click = "*"
+rich = "*"
+matplotlib = "*"
+numpy="<2.0.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
+pytest = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
