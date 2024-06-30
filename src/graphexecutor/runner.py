@@ -1,13 +1,13 @@
 import inspect
 
-from graphexecutor import graphbuilder as gb
+from graphexecutor import builder
 
 from dask.delayed import delayed
 import networkx as nx
 
 
 def unused_keys(graph, rootns):
-    leaves = set(gb.graph_leaves(graph))
+    leaves = set(builder.graph_leaves(graph))
     leaf_names = {leaf.name for leaf in leaves}
 
     rootns_keys = set(rootns.keys())
@@ -24,7 +24,7 @@ def to_delayed_graph(graph):
 
 
 def fill_leaves(graph, rootns):
-    nodes_to_fill = gb.graph_leaves(graph)
+    nodes_to_fill = builder.graph_leaves(graph)
     for node in nodes_to_fill:
         if not node.default is inspect._empty and node.name not in rootns:
             val = node.default

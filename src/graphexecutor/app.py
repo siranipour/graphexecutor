@@ -8,7 +8,7 @@ import rich
 from rich.logging import RichHandler
 from rich.traceback import install
 
-from graphexecutor.runcard_parser import execute_runcard
+from graphexecutor.parser import execute_runcard
 
 FORMAT = "%(message)s"
 logging.basicConfig(

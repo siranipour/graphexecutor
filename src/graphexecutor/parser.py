@@ -1,12 +1,9 @@
 import yaml
 
-from graphexecutor.graphbuilder import actions_to_graph, FunctionNode
-from graphexecutor.graphchecker import check_bare_graph_against_runcard
-from graphexecutor.graphrunner import (
-    fill_graph,
-    to_delayed_graph,
-    graph_solution,
-)
+from graphexecutor.builder import actions_to_graph, FunctionNode
+from graphexecutor.checker import check_bare_graph_against_runcard
+from graphexecutor.runner import fill_graph, to_delayed_graph, graph_solution
+
 
 
 def read_input(path):
@@ -60,11 +57,6 @@ def filled_graph_from_runcard(runcard, spec_func_map, parallel):
     graph_with_values = fill_graph(bare_graph, rootns)
 
     return graph_with_values
-
-
-def graph_from_path(path, parallel):
-    runcard = read_input(path)
-    return filled_graph_from_runcard(runcard, parallel)
 
 
 def execute_runcard(path, spec_func_map, parallel):

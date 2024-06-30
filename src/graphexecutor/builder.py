@@ -3,10 +3,13 @@ import inspect
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from graphexecutor import graphchecker as gc
+from graphexecutor import checker
 
 
 class Node:
+    def __init__(self, name):
+        self.name = name
+
     def __hash__(self):
         return hash(self.name)
 
@@ -112,7 +115,7 @@ def actions_to_graph(base_nodes, spec_func_map):
     base_graph = create_base_graph(base_nodes)
     completed_graph = complete_graph(base_graph, spec_func_map)
     graph_with_solution_node = add_solution_node(completed_graph, base_nodes)
-    gc.check_for_cycles(graph_with_solution_node)
+    checker.check_for_cycles(graph_with_solution_node)
     return graph_with_solution_node
 
 

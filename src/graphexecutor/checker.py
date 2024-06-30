@@ -4,8 +4,8 @@ import logging
 import networkx as nx
 
 
-from graphexecutor import graphbuilder as gb
-from graphexecutor import graphrunner as gr
+from graphexecutor import builder
+from graphexecutor import runner
 
 class CycleError(Exception): pass
 
@@ -23,13 +23,13 @@ def format_node_path(node_path_map):
     return msg
 
 def check_bare_graph_against_runcard(graph, rootns):
-    needed_nodes = [i for i in gb.graph_leaves(graph) if i.default is inspect._empty]
+    needed_nodes = [i for i in builder.graph_leaves(graph) if i.default is inspect._empty]
     needed_keys = set([node.name for node in needed_nodes])
 
     missing_keys = needed_keys.difference(rootns.keys())
     missing_nodes = [node for node in needed_nodes if node.name in missing_keys]
 
-    solution_node = gb.find_solution_node(graph)
+    solution_node = builder.find_solution_node(graph)
 
     node_path_map = {}
     for node in missing_nodes:
@@ -38,7 +38,7 @@ def check_bare_graph_against_runcard(graph, rootns):
         path = [node.name for node in path]
         node_path_map[node.name] = path
 
-    extra_keys = gr.unused_keys(graph, rootns)
+    extra_keys = runner.unused_keys(graph, rootns)
 
     if missing_keys:
         msg = format_node_path(node_path_map)
